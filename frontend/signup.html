@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-sans min-h-screen bg-[#0a0f1e] flex">
+
+  <div class="hidden lg:block w-[55%] relative overflow-hidden">
+    <img src="img/Aesthetic (1).webp" class="w-full max-h-screen object-cover" />
+
+    <div class="absolute inset-0 bg-gradient-to-br from-[#0a0f1e]/60 via-[#4f2eba]/40 to-[#0a0f1e]/80 flex flex-col p-12">
+
+      <div class="inline-flex items-center gap-2 bg-purple-600/20 border border-purple-300/20 rounded-full px-4 py-2 text-purple-300 text-sm mb-5 w-fit">
+        <span class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>
+        <span id="counter">12,480</span> readers and growing
+      </div>
+
+      <h1 class="text-white text-[clamp(2.2rem,3.5vw,3.4rem)] font-semibold leading-tight mb-4">
+        Join readers<br>
+        exploring <span class="text-purple-300">tech</span><br>
+        & ideas
+      </h1>
+
+      <p class="text-white/60 text-sm max-w-sm leading-relaxed">
+        Curated articles, deep dives, and weekly digests — all in one place.
+      </p>
+
+    </div>
+  </div>
+  <div class="flex-1 bg-[#0d1117] flex items-center justify-center px-6 py-10 overflow-y-auto">
+
+    <div class="w-full max-w-md bg-[#111827] border border-slate-500/10 rounded-2xl p-8">
+
+      <h2 class="text-slate-100 text-xl font-semibold text-center mb-1">
+        Create your account
+      </h2>
+
+      <p class="text-slate-500 text-xs text-center mb-6">
+        Already have one?
+        <a href="login.html" class="text-purple-300 underline">Log in</a>
+      </p>
+      <button class="w-full flex items-center justify-center gap-2 bg-purple-600/10 border border-purple-500/30 rounded-lg py-3 text-sm text-purple-300 font-medium hover:bg-purple-600/20 hover:border-purple-500/50 transition transform hover:scale-[1.01]">
+        <div class="w-5 h-5 bg-white rounded-full flex items-center justify-center">
+          <img src="img/google icon.webp" alt="">
+        </div>
+        Continue with Google
+      </button>
+      <div class="flex items-center gap-3 my-5 text-[11px] uppercase tracking-wider text-slate-600">
+        <span class="flex-1 h-px bg-slate-500/10"></span>
+        or sign up with email
+        <span class="flex-1 h-px bg-slate-500/10"></span>
+      </div>
+      <form class="space-y-3" id="signup-form">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <label class="text-slate-400 text-[11px] uppercase tracking-wide">First name</label>
+            <input type="text" placeholder="John" id="first-name" class="bg-slate-900/80 border border-slate-500/10 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
+            <p class="error text-red-500 text-sm hidden"></p>
+        </div>
+
+          <div class="flex flex-col gap-1">
+            <label class="text-slate-400 text-[11px] uppercase tracking-wide">Last name</label>
+            <input type="text" placeholder="Doe" id="last-name" class="bg-slate-900/80 border border-slate-500/10 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
+            <p class="error text-red-500 text-sm hidden"></p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+            <label class="text-slate-400 text-[11px] uppercase tracking-wide">Email address</label>
+            <input type="email" placeholder="john@example.com" id="email" class="bg-slate-900/80 border border-slate-500/10 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
+            <p class="error text-red-500 text-sm hidden"></p>
+        </div>
+        <div class="flex flex-col gap-1 relative">
+            <label class="text-slate-400 text-[11px] uppercase tracking-wide">Password</label>
+            <input type="password" placeholder="Min. 8 characters" id="password" class="bg-slate-900/80 border border-slate-500/10 rounded-lg px-3 py-2 pr-10 text-sm text-slate-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
+            <img src="img/eye-blind.webp" class="toggle-password absolute h-8 w-8 top-[40%] right-0" alt="">
+            <p class="error text-red-500 text-sm hidden"></p>
+        </div>
+        <div class="flex flex-col gap-1 relative">
+            <label class="text-slate-400 text-[11px] uppercase tracking-wide">Confirm password</label>
+            <input type="password" placeholder="Re-enter password"  id="con-password" class="bg-slate-900/80 border border-slate-500/10 rounded-lg px-3 py-2 pr-10 text-sm text-slate-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none" />
+            <img src="img/eye-blind.webp" class="toggle-password absolute h-8 w-8 top-[40%] right-0" alt="">
+            <p class="error text-red-500 text-sm hidden"></p>
+        </div>
+        <div class="bg-purple-600/10 border border-purple-500/20 rounded-xl p-3">
+          <p class="text-purple-300 text-[11px] uppercase mb-2">Email verification</p>
+
+          <div class="flex gap-2">
+            <input type="text" maxlength="6" placeholder="Enter 6-digit OTP"
+              class="flex-1 bg-slate-900/80 border border-slate-500/10 rounded-lg px-3 py-2 text-sm text-slate-100 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none tracking-widest" />
+
+            <button type="button" id="get-otp-btn" class="bg-purple-600/20 border border-purple-500/40 text-purple-300 text-sm px-3 rounded-lg hover:bg-purple-600/30">
+              Get OTP
+            </button>
+          </div>
+
+          <p class="text-slate-500 text-xs mt-2">
+            An OTP will be sent to your email address
+          </p>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-slate-400">
+          <input id="agree" type="checkbox" class="accent-purple-600 w-4 h-4" />
+          <span>
+            I agree to the
+            <a href="#" class="text-purple-300 underline">Terms & Conditions</a>
+          </span>
+        </div>
+        <button type="submit" class="bg-gradient-to-l w-full from-purple-600 to-indigo-600 hover:scale-[1.02] transition transform font-semibold py-2 text-[18px] text-[#fefefe] rounded-lg md:text-[24px] lg:w-[300px]" id="sign-up">Sign Up</button>
+
+      </form>
+
+      <div class="h-px bg-slate-500/10 my-4"></div>
+
+      <p class="text-center text-sm text-slate-500">
+        Already have an account?
+        <a href="login.html" class="text-purple-300 underline">Log in</a>
+      </p>
+
+    </div>
+
+  </div>
+<script src="dist/login.js"></script>
+</body>
+</html>

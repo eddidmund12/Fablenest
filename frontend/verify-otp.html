@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- verify-otp.html -->
+<form id="otp-form">
+  <input type="text" id="otp-input" placeholder="Enter OTP" maxlength="6" />
+  <button type="submit">Verify</button>
+</form>
+
+<script>
+  const form = document.getElementById("otp-form");
+  const email = localStorage.getItem("pendingEmail");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const otp = document.getElementById("otp-input").value.trim();
+
+    const response = await fetch("/api/auth/verify-otp", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.removeItem("pendingEmail");
+      window.location.href = "login.html"; // redirect after verified
+    } else {
+      alert(data.error || "OTP verification failed");
+    }
+  });
+</script>
+</body>
+</html>

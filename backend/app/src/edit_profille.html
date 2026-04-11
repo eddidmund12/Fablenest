@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit profile</title>
+</head>
+<body>
+    
+    <form method="POST" enctype="multipart/form-data">
+        <label>Profile Picture(Optional)</label>
+        <input type="file" name="profile_picture" accept="image/*">
+
+        <label>Bio</label>
+        <textarea name="Bio" placeholder="Tell others about yourself...">{{ user.bio }}</textarea>
+        <label>Website</label>
+        <input type="text" name="Website" placeholder="https://yoursite.com" value="{{ user.Website or ''}}">
+        <label>X handle</label>
+        <input type="text" name="twitter" placeholder="https://twitter.com/username" value="{{ user.twitter or ''}}">
+        <label>Linkedin</label>
+        <input type="text" name="linkedin" placeholder="https://linkedin.com/username" value="{{ user.linkedin }}">
+        <label>Instagram</label>
+        <input type="text" name="instagram" placeholder="https://instagram.com/username" value="{{ user.instagram }}">
+        <label>Facebook</label>
+        <input type="text" name="facebook" placeholder="https://facebook.com/username" value="{{ user.facebook }}">
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

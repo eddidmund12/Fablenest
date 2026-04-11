@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choose Your Username</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            syne: ["Syne", "sans-serif"],
+            dm: ["DM Sans", "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: "DM Sans", sans-serif; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .fade-up { animation: fadeUp 0.6s ease both; }
+    .fade-up-1 { animation-delay: 0.05s; }
+    .fade-up-2 { animation-delay: 0.15s; }
+    .fade-up-3 { animation-delay: 0.25s; }
+    .fade-up-4 { animation-delay: 0.35s; }
+
+    .username-input:focus { animation: pulse-ring 1s ease-out; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin-slow 0.7s linear infinite;
+      display: none;
+    }
+    .checking .spinner { display: inline-block; }
+
+    /* status indicator dot */
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background 0.3s;
+    }
+    .status-dot.available { background: #34d399; }
+    .status-dot.taken     { background: #f87171; }
+    .status-dot.idle      { background: #475569; }
+    .status-dot.checking  { background: #a78bfa; animation: pulse-ring 1s ease-out infinite; }
+
+    /* decorative grid lines */
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(139,92,246,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,92,246,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#0d1117] grid-bg flex items-center justify-center px-4 py-12">
+
+  <!-- Ambient glow -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden">
+    <div class="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-purple-700/10 blur-[120px]"></div>
+    <div class="absolute -bottom-32 -right-32 w-[400px] h-[400px] rounded-full bg-indigo-700/10 blur-[120px]"></div>
+  </div>
+
+  <div class="relative w-full max-w-md">
+
+    <!-- Card -->
+    <div class="bg-[#111827]/90 border border-slate-700/50 rounded-2xl p-8 shadow-2xl backdrop-blur-sm">
+
+      <!-- Icon -->
+      <div class="fade-up fade-up-1 flex justify-center mb-6">
+        <div class="w-16 h-16 rounded-2xl bg-purple-600/10 border border-purple-500/20 flex items-center justify-center">
+          <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Heading -->
+      <div class="fade-up fade-up-2 text-center mb-8">
+        <h1 class="font-syne text-2xl font-bold text-slate-100 mb-2">Pick your username</h1>
+        <p class="text-slate-500 text-sm leading-relaxed">
+          This is how others will find and recognise you.<br>Choose something memorable.
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form id="username-form" novalidate class="fade-up fade-up-3 space-y-4">
+
+        <!-- Input group -->
+        <div>
+          <div class="relative flex items-center">
+            <!-- @ prefix -->
+            <span class="absolute left-3 text-slate-500 font-syne font-semibold text-sm select-none">@</span>
+
+            <input
+              type="text"
+              id="username"
+              placeholder="yourname"
+              maxlength="30"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+              class="username-input w-full bg-slate-900/80 border border-slate-600/40 rounded-xl pl-8 pr-10 py-3 text-slate-100 text-sm font-dm placeholder-slate-600 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition"
+            />
+
+            <!-- Status dot -->
+            <span class="absolute right-3">
+              <span class="status-dot idle" id="status-dot"></span>
+            </span>
+          </div>
+
+          <!-- Feedback line -->
+          <div class="mt-2 min-h-[20px] flex items-center gap-2">
+            <div class="spinner" id="spinner"></div>
+            <p id="feedback" class="text-xs text-slate-500">3–30 characters, letters, numbers and underscores only.</p>
+          </div>
+        </div>
+
+        <!-- Rules -->
+        <ul class="text-xs text-slate-600 space-y-1 pl-1">
+          <li id="rule-length" class="flex items-center gap-2 transition-colors">
+            <span class="rule-icon">○</span> 3–30 characters
+          </li>
+          <li id="rule-chars" class="flex items-center gap-2 transition-colors">
+            <span class="rule-icon">○</span> Letters, numbers and underscores only
+          </li>
+          <li id="rule-start" class="flex items-center gap-2 transition-colors">
+            <span class="rule-icon">○</span> Must start with a letter
+          </li>
+        </ul>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          id="submit-btn"
+          disabled
+          class="w-full mt-2 py-3 rounded-xl font-syne font-semibold text-sm text-white
+                 bg-gradient-to-r from-purple-600 to-indigo-600
+                 disabled:opacity-40 disabled:cursor-not-allowed
+                 hover:scale-[1.02] active:scale-[0.99]
+                 transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <span id="btn-text">Continue</span>
+          <div class="spinner" id="btn-spinner"></div>
+        </button>
+
+      </form>
+
+      <!-- Step indicator -->
+      <div class="fade-up fade-up-4 flex justify-center gap-2 mt-8">
+        <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+        <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+        <span class="w-6 h-2 rounded-full bg-purple-500"></span>
+      </div>
+
+    </div>
+
+    <!-- Bottom note -->
+    <p class="text-center text-xs text-slate-600 mt-4">
+      You can change your username later in settings.
+    </p>
+  </div>
+
+  <script src="dist/set-username.js"></script>
+</body>
+</html>

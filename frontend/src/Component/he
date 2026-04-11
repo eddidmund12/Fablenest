@@ -1,0 +1,275 @@
+
+// postsRenderer.ts
+// import { posts } from "../data/posts.js";
+import { store } from "../data/store.js";
+import { Post } from "../types/post.js";
+import { timeAgo } from "../utils/timeAgo.js";
+import { posts } from "../data/posts.js";
+// import { bookmarks } from "../data/bookmarks.js";
+import {refreshBookmarkPage} from "../pages/bookmarks.js";
+
+// Global container for bookmarks page
+let bookmarksContainer: HTMLDivElement | null = null;
+
+// ------------------------------------
+// Render a single post card
+// ------------------------------------
+export function renderPostCard(post: Post): HTMLDivElement {
+  const card = document.createElement("div");
+  const topCard = document.createElement("div");
+  const topCardInfo = document.createElement("div");
+  const authorImg = document.createElement("div");
+  const authorName = document.createElement("div");
+  const time = document.createElement("div");
+  const cardTitle = document.createElement("div");
+  const reaction = document.createElement("div");
+  const bookmark = document.createElement("div");
+
+  // Author Image & Info
+  authorImg.innerHTML = `<img src="${post.img}" alt="${post.title}" class="h-10 w-10 rounded-md md:h-12 md:w-12" />`;
+  authorName.innerHTML = `
+    <h4 class="text-gray-300 p-0 m-0 leading-0 text-[17px] md:text-[24px]">${post.author}</h4>
+    <h5 class="text-gray-400 p-0 m-0 leading-[4px] text-[16px] md:text-[20px]">${post.userName}</h5>
+  `;
+  authorName.classList.add("flex", "flex-col");
+
+  time.innerHTML = `
+    <i class="fa-solid fa-circle text-[6px] text-gray-400 md:text-[10px]"></i>
+    <span class="text-gray-500 text-[15px] md:text-[22px]">${timeAgo(post.createdAt)}</span>
+  `;
+  time.className = "flex items-center gap-[6px] md:gap-[10px]"
+  // Post Title
+  cardTitle.innerHTML = `
+    <h3 class="text-gray-300 text-[22px] md:text-[26px]">${post.title}</h3>
+    <h4 class="text-gray-400 text-[18px] md:text-[22px]">${post.subTitle}</h4>
+  `;
+
+  // Time
+  
+  setInterval(() => {
+    const span = time.querySelector("span");
+    if (span) span.textContent = timeAgo(post.createdAt);
+  }, 10000);
+
+  // Bookmark Button
+  // Bookmark Button
+function updateBookmarkIcon() {
+  const isBookmarked = store.isBookmarked(post.id);
+  bookmark.innerHTML = isBookmarked
+    ? `<i class="fa-solid fa-bookmark text-[#6366F1] md:text-[26px]"></i>`
+    : `<i class="fa-regular fa-bookmark text-gray-400 md:text-[26px]"></i>`;
+}
+
+updateBookmarkIcon();
+
+bookmark.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  store.toggleBookmark(post);
+  updateBookmarkIcon();
+
+  if (store.isBookmarked(post.id)) {
+    showBookmarkNotif("Added to bookmark");
+  } else {
+    showBookmarkNotif("Removed from bookmark");
+  }
+});
+  topCardInfo.appendChild(authorImg);
+  topCardInfo.appendChild(authorName);
+  topCardInfo.appendChild(time);
+  topCardInfo.className= "flex items-center gap-3 md:gap-4"
+
+  topCard.appendChild(topCardInfo);
+  topCard.appendChild(bookmark);
+  topCard.className= "flex items-center justify-between gap-3 md:gap-4"
+
+  card.appendChild(topCard);
+  card.appendChild(cardTitle);
+
+
+  // Reaction (comments, likes, views)
+  reaction.innerHTML = `
+    <p class="text-gray-500 text-sm md:text-[20px]"><i class="fa-solid fa-comment text-gray-400"></i> ${post.comment}</p>
+    <button id="likeBtn" class="flex items-center gap-1 text-gray-500 md:text-[20px]">
+      <svg id="heart" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-100 transition-transform duration-200" viewBox="0 0 24 24">
+        <defs>
+          <linearGradient id="heartGradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#6366F1"/>
+          </linearGradient>
+        </defs>
+        <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        fill="transparent" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      ${post.likes}
+    </button>
+    <p class="text-gray-500 md:text-[20px]"><i class="fa-solid fa-chart-simple"></i> ${post.views}</p>
+  `;
+  
+// const likeCount = likeBtn.querySelector("span") || likeBtn.childNodes[1];
+const likeBtn = reaction.querySelector("#likeBtn") as HTMLButtonElement;
+let liked = false;
+
+likeBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent opening modal
+
+  if (!liked) {
+    store.likePost(post.id);
+  } else {
+    store.unlikePost(post.id);
+  }
+
+  liked = !liked;
+});
+  reaction.classList.add("flex", "gap-5");
+
+  card.appendChild(reaction);
+
+  card.classList.add(
+    "bg-[#1f1f2e]",
+    "backdrop-blur-xl",
+    "shadow-2xl",
+    "rounded-2xl",
+    "flex",
+    "flex-col",
+    "gap-4",
+    "p-4",
+    "h-auto",
+    "border",
+    "border-gray-700"
+  );
+  card.style.cursor = "pointer";
+
+card.addEventListener("click", (e) => {
+  // Prevent bookmark button from triggering post open
+  if ((e.target as HTMLElement).closest("button")) return;
+
+  openPostDetail(post);
+});
+  return card;
+
+}
+
+export function openPostDetail(post: Post) {
+  const overlay = document.createElement("div");
+  overlay.className =
+    "fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4";
+
+  const modal = document.createElement("div");
+  modal.className =
+    "bg-[#1f1f2e] max-w-2xl w-full rounded-2xl p-6 overflow-y-auto max-h-[90vh]";
+
+  modal.innerHTML = `
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-white text-2xl font-semibold">${post.title}</h2>
+      <button id="closeModal" class="text-gray-400 text-xl">&times;</button>
+    </div>
+
+    <p class="text-gray-400 mb-4">${post.subTitle}</p>
+
+    <div class="flex items-center gap-3 mb-4">
+      <img src="${post.img}" class="w-10 h-10 rounded-md" />
+      <div>
+        <p class="text-gray-300">${post.author}</p>
+        <p class="text-gray-500 text-sm">${post.userName}</p>
+      </div>
+    </div>
+
+    <div class="text-gray-300 mb-4">
+      ${post.content || "No content available"}
+    </div>
+
+    ${
+      post.images
+        ? `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            ${post.images
+              .map(
+                (img: string) =>
+                  `<img src="${img}" class="rounded-lg w-full object-cover" />`
+              )
+              .join("")}
+          </div>`
+        : ""
+    }
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  // Close modal
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  modal.querySelector("#closeModal")?.addEventListener("click", () => {
+    overlay.remove();
+  });
+}
+
+export function renderCategory(categoryName: string): HTMLDivElement {
+  const container = document.createElement("div");
+  container.className = "flex flex-col gap-3 px-2 py-3";
+
+  const allPosts = store.getPosts();
+
+let filtered: Post[];
+if (categoryName === "all") {
+  filtered = allPosts;
+} else {
+  filtered = allPosts.filter(
+    (p) => p.category.toLowerCase() === categoryName.toLowerCase()
+  );
+}
+
+  filtered.forEach((post) => {
+    container.appendChild(renderPostCard(post));
+  });
+
+  return container;
+}
+
+// ------------------------------------
+// Render the bookmarks page container
+// ------------------------------------
+export function renderBookmarkPosts() {
+  if (!bookmarksContainer) return;
+
+  const container = bookmarksContainer!; // <-- tell TS it's not null
+  container.innerHTML = "";
+
+  const bookmarks = store.getBookmarks();
+
+if (bookmarks.length === 0) {
+    const empty = document.createElement("div");
+    empty.textContent = "No bookmarks yet";
+    empty.className = "text-gray-400";
+    container.appendChild(empty);
+  } else {
+    bookmarks.forEach((post) => {
+      container.appendChild(renderPostCard(post));
+    });
+  }
+}
+
+// ------------------------------------
+// Render posts inside bookmarks page dynamically
+// ------------------------------------
+
+// ------------------------------------
+// Bookmark notification
+// ------------------------------------
+const bookmarkNotif = document.createElement("div");
+bookmarkNotif.className =
+  "fixed top-5 left-1/2 -translate-x-1/2 bg-indigo-500 z-50 text-white text-sm px-4 py-2 rounded shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 md:text-[20px]";
+document.body.appendChild(bookmarkNotif);
+
+export function showBookmarkNotif(message: string) {
+  bookmarkNotif.textContent = message;
+  bookmarkNotif.classList.remove("opacity-0");
+  bookmarkNotif.classList.add("opacity-95");
+
+  setTimeout(() => {
+    bookmarkNotif.classList.remove("opacity-95");
+    bookmarkNotif.classList.add("opacity-0");
+  }, 2000);
+}

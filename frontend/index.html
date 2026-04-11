@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="fontawesome7/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/aeonika" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bellefair&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bellefair&family=Barlow+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        clash: ['Clash Display', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        aeonik: ['Aeonik', 'sans-serif'],
+                        barlow: ['Barlow', 'sans-serif'],
+                        barlowCondensed: ['Barlow Condensed', 'sans-serif'],
+                        bellefair: ['Bellefair', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-[#080e20] no-repeat cover min-h-screen flex flex-col" id="mainContainer">
+    <div id="app">
+        <main class="flex-1 pb-10 relative" >
+        <header id="header" class="fixed top-0 z-50 bg-[#080e20] w-full flex flex-col gap-3 pb-2 transition-transform duration-700">
+            <div id="headerTop" class="flex justify-between items-center pt-3 px-3"></div>
+            <div class="bg-white/50 w-full h-[1px]"></div>
+        </header>
+        <div id="createBtn" class="bg-indigo-600 fixed bottom-24 right-4 z-50 h-16 w-16 flex justify-center items-center rounded-full shadow-lg hover:bg-indigo-500 transition cursor-pointer transition-transform duration-700">
+            <i class="fa-solid fa-plus fa-2x text-gray-300"></i>
+        </div>
+        <div id="overlay" class="fixed inset-0 z-50  bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition duration-300"></div>
+        <aside id="sidebar" class="fixed z-50 top-0 left-0 h-full w-72 bg-[#11162a] -translate-x-full transition duration-300 shadow-xl"></aside>
+       
+        <div id="homeBody" class="homeBody pt-20">
+
+            <div class="mainContent" id="mainContent">
+                 
+                <div id="trending"></div>
+
+                <div id="categories">
+                    <div class="bg-slate-900/80 backdrop-blur-xl pl-4 h-12 mt-8 shadow-2xl text-[16px] font-Barlow font-bold text-gray-100 flex gap-6 items-center md:text-[22px]">
+                        <button id="forYou" class="category-btn border-b-2 border-indigo-500 transition-all duration-700">For you</button>
+                        <button id="featured" class="category-btn border-b-2 border-transparent transition-all duration-700">Featured</button>
+                    </div>
+
+                    <div id="categoryContent"></div>
+                </div>
+                
+            </div>
+            <div id="static-part">
+                <div class="px-2 flex flex-col gap-2 md pt-4">
+                    <div class="rounded-md text-[20px] font-Aeonik font-bold tracking-[2px] text-center text-gray-100 p-1 md:text-[28px]">Subscribe to Our Newsletter</div>
+                    <div class="flex h-10 rounded-lg subscribe gap-2 justify-center md:h-12">
+                        <input type="text" placeholder="Enter your email" class="bg-[#bfbcc5] font-[16px] w-[60%] rounded-lg">
+                        <button class="bg-[#384083] font-Aeonik text-[20px] font-barlow text-gray-300 w-[30%] rounded-lg md:text-[28px]" >Subscribe</button>
+                    </div>
+                    
+                </div>
+                <div class="flex items-center justify-center mt-8 ">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" class="h-12 w-12 md:h-14 md:w-14" >
+                        <g transform="translate(10, 10)">
+                            <path d="M 49 12 Q 20 45 44 88 L 48 88 L 48 30 Q 48 20 49 12 Z" fill="#F59E0B" />
+                            <path d="M 51 12 Q 80 45 56 88 L 52 88 L 52 30 Q 52 20 51 12 Z" fill="#F59E0B" />
+                            <path d="M 12 55 Q 50 105 88 55" fill="none" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M 5 45 Q 45 95 80 65" fill="none" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M 20 65 Q 55 95 95 45" fill="none" stroke="#0F172A" stroke-width="6" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                    <h3 class="font-barlowCondensed font-medium tracking-[1px] text-gray-100 text-[24px] md:text-[24px] tracking-[2px]">FableNest</h3>
+                </div>
+                <p class="text-gray-400 text-[16px] tracking-[1px] px-2 pt-[8px] text-center md:text-[26px]">© 2026 FableNest. All Rights Reserved</p>
+            </div>
+
+            <!-- <div id="sidebar"></div> -->
+        </div>
+        
+    </main>
+    <footer id="mainFooter" class="fixed bottom-0 w-full bg-slate-900/90 backdrop-blur-xl border-t border-gray-700 transition-transform duration-700">
+        <div class="flex justify-around items-center h-16 text-gray-400 ">
+
+            <button class="flex flex-col items-center text-indigo-500">
+            <i class="fa-solid fa-house text-lg hover:scale-110 transition md:text-[28px]" ></i>
+            <span class="text-xs md:text-[16px]">Home</span>
+            </button>
+
+            <button class="flex flex-col items-center">
+            <i class="fa-solid fa-coins text-lg hover:scale-110 transition md:text-[28px]"></i>
+            <span class="text-xs md:text-[16px]">Finance</span>
+            </button>
+
+            <button class="flex flex-col items-center">
+            <i class="fa-solid fa-microchip text-lg hover:scale-110 transition md:text-[28px]"></i>
+            <span class="text-xs md:text-[16px]">Technology</span>
+            </button>
+
+            <button class="flex flex-col items-center">
+            <i class="fa-solid fa-rocket text-lg hover:scale-110 transition md:text-[28px]"></i>
+            <span class="text-xs md:text-[16px]">Startup</span>
+            </button>
+        </div>
+    </footer>
+    </div>
+   <script type="module" src="./dist/script.js"></script>
+</body>
+
+</html>
